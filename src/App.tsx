@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
+import "./App.css";
 
 interface ResponseData {
   message: string;
 }
 
 const App = () => {
-  const [persona1, setPersona1] = useState<string>("Dwayne Johnson");
-  const [persona2, setPersona2] = useState<string>("Mr. T");
+  const [persona1, setPersona1] = useState<string>("");
+  const [persona2, setPersona2] = useState<string>("");
   const [conversation, setConversation] = useState<string[]>([]);
+  const [isStarted, setIsStarted] = useState<boolean>(false);
 
   const getApiResponse = async () => {
-    console.log(`getApiResponse`);
     const continuationPrompt = `${conversation.slice(Math.max(conversation.length - 5, 0)).join(" ")}`;
-    console.log(continuationPrompt);
     const request = await fetch("http://localhost:5000/", {
       method: "POST",
       headers: {
@@ -33,57 +33,69 @@ const App = () => {
     if (conversation.length >= 10) {
       const sliced = conversation.slice(1);
       setConversation([...sliced, response.message]);
-      console.log(`updateConversation`);
     } else {
       setConversation([...conversation, response.message]);
-      console.log(`updateConversation`);
     }
-  };
+  };  
+
+  const handleStartConversation = () => {
+    if(persona1 !== "" && persona2 !== "") {
+    setIsStarted(true);
+    setConversation([]);
+    }
+  }
+
+  const handleStop = () => {
+    setIsStarted(false);
+  }
+
+  const handleClearConversation = () => {
+    setConversation([]);
+  }
 
   useEffect(() => {
-    getApiResponse();
-  }, []);
-
-  useEffect(() => {
+    if (!isStarted) {
+      return;
+    }
     const interval = setInterval(() => {
       getApiResponse();
     }, 4000);
-    console.log(`clearInterval`);
     return () => clearInterval(interval);
   }, [conversation]);
 
   return (
-    <div>
-      {conversation.map((node, index) => (
-        <p key={index}>
-          {index % 2 === 0 ? persona1 : persona2}: {node}
-        </p>
-      ))}
+    <div className="container">
+      <h3>GPT-3.5 Auto-Conversation Experiment</h3>
+     <label >Persona 1:</label>
+      <input
+        type="text"
+        id="persona1"
+        name="persona1"
+        value={persona1}
+        onChange={e => setPersona1(e.target.value)}
+      />
+      <label >Persona 2:</label>
+      <input
+        type="text"
+        id="persona2"
+        name="persona2"
+        value={persona2}
+        onChange={e => setPersona2(e.target.value)}
+      />
+      <div className="buttons">
+        <button onClick={handleStartConversation} disabled={isStarted}>Start</button>
+        <button onClick={handleStop} disabled={!isStarted}>Stop</button>
+        <button onClick={handleClearConversation} disabled={conversation.length === 0}>Clear</button>
+      </div>
+      <ul className="conversation">
+        {conversation.map((node, index) => (
+          <li className="conversation-item" key={index}>
+            <strong>{index % 2 === 0 ? persona1 : persona2}:</strong> {node}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
 export default App;
-
-//const [responseData, setResponseData] = useState<ResponseData | null>(null);
-//const [inputValue, setInputValue] = useState("");
-
-// const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-//   event.preventDefault();
-//   const response = await fetch("http://localhost:5000/", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ message: inputValue }),
-//   });
-//   const data = await response.json();
-//   setResponseData(data);
-// };
-
-{
-  /* <form onSubmit={handleSubmit}>
-        <textarea value={inputValue} onChange={(event) => setInputValue(event.target.value)} />
-        <button type="submit">Submit</button>
-      </form> */
-}

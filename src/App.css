@@ -1,38 +1,92 @@
-.App {
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
   text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+label {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 4px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input[type="text"] {
+  display: block;
+  min-width: 300px;
+  padding: 8px;
+  margin: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.buttons {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: flex-end;
+  margin-bottom: 16px;  
 }
 
-.App-link {
-  color: #61dafb;
+button[disabled] {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button[disabled]:hover {
+  background-color: #6c757d;
+}
+
+button[disabled]:active {
+  background-color: #6c757d;
+}
+
+button {
+  margin: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004085;
+}
+
+.conversation {
+  list-style: none;
+  padding: 0;
+}
+
+.conversation-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #f0f2f5;
+}
+
+.conversation-item:nth-child(even) {
+  background-color: #e9ecef;
 }
