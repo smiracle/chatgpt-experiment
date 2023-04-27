@@ -10,8 +10,10 @@ const App = () => {
   const [persona2, setPersona2] = useState<string>("");
   const [conversation, setConversation] = useState<string[]>([]);
   const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const getApiResponse = async () => {
+    setIsFetching(true);
     const continuationPrompt = `${conversation.slice(Math.max(conversation.length - 5, 0)).join(" ")}`;
     const request = await fetch("http://localhost:5000/", {
       method: "POST",
@@ -36,14 +38,16 @@ const App = () => {
     } else {
       setConversation([...conversation, response.message]);
     }
+    setIsFetching(false);
   };  
 
   const handleStartConversation = () => {
-    if(persona1 !== "" && persona2 !== "") {
-    setIsStarted(true);
-    setConversation([]);
+    if (persona1 !== "" && persona2 !== "") {
+      setConversation([]);
+      setIsStarted(true);
+      getApiResponse(); // Call the API immediately when starting the conversation
     }
-  }
+  };
 
   const handleStop = () => {
     setIsStarted(false);
@@ -54,14 +58,17 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (!isStarted) {
+    if (!isStarted || isFetching) {
       return;
     }
     const interval = setInterval(() => {
-      getApiResponse();
+      if (isStarted && !isFetching) {
+        console.log("Calling API");
+        getApiResponse();
+      }
     }, 4000);
     return () => clearInterval(interval);
-  }, [conversation]);
+  }, [isStarted, isFetching]);
 
   return (
     <div className="container">
