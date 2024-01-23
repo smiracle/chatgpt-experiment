@@ -15,7 +15,7 @@ const App = () => {
   const getApiResponse = async () => {
     setIsFetching(true);
     const continuationPrompt = `${conversation.slice(Math.max(conversation.length - 5, 0)).join(" ")}`;
-    const request = await fetch("http://localhost:5000/", {
+    const request = await fetch("/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
