@@ -1,14 +1,18 @@
-### ChatGPT-Experiment
+# Infinite Chatbot
 
-## Created 3/23/2023 by Steven Miracle
+#### Created 3/23/2023 by Steven Miracle
 
-### Requires environment variables, set values for these 2 keys in an .env file at the root directory of the project:
+Requires environment variables from Open AI's APIs, set values for these 2 keys in an .env file at the root directory of
+the project:
 
--`OPENAI_API_KEY` 
+<ul>
+<li>`OPENAI_API_KEY`</li>
+<li>`ORGANIZATION`</li>
+</ul>
 
--`ORGANIZATION`
+### Running the app locally:
 
-## Commands:
-
--`node index.js` to start the backend api server
--`PORT=3000 npm start` to run the frontend app
+<ul>
+<li>Step 1: `npm start` to start the backend express server </li>
+<li>Step 2: `npm run dev` to run the app</li>
+</ul>

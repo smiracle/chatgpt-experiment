@@ -6,8 +6,8 @@ interface ResponseData {
 }
 
 const App = () => {
-  const [persona1, setPersona1] = useState<string>("");
-  const [persona2, setPersona2] = useState<string>("");
+  const [persona1, setPersona1] = useState<string>("Bob Ross");
+  const [persona2, setPersona2] = useState<string>("Mr. T");
   const [conversation, setConversation] = useState<string[]>([]);
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -22,9 +22,9 @@ const App = () => {
       },
       body: JSON.stringify({
         message:
-          conversation.length == 0
+          conversation.length === 0
             ? `Pretend you are ${persona1}, introduce yourself and say something unique and memorable to start a 1:1 conversation`
-            : conversation.length == 1
+            : conversation.length === 1
             ? `Pretend you are ${persona2}, introduce yourself and say something unique and memorable to start a 1:1 conversation`
             : conversation.length % 2 === 0
             ? `Assume the role of ${persona1} and continue the conversation by talking to ${persona2} in a way that would seem natural to a human: ${continuationPrompt}`
@@ -39,23 +39,23 @@ const App = () => {
       setConversation([...conversation, response.message]);
     }
     setIsFetching(false);
-  };  
+  };
 
   const handleStartConversation = () => {
     if (persona1 !== "" && persona2 !== "") {
       setConversation([]);
       setIsStarted(true);
-      getApiResponse(); // Call the API immediately when starting the conversation
+      getApiResponse();
     }
   };
 
   const handleStop = () => {
     setIsStarted(false);
-  }
+  };
 
   const handleClearConversation = () => {
     setConversation([]);
-  }
+  };
 
   useEffect(() => {
     if (!isStarted || isFetching) {
@@ -66,33 +66,27 @@ const App = () => {
         console.log("Calling API");
         getApiResponse();
       }
-    }, 4000);
+    }, 4000) as NodeJS.Timeout;
     return () => clearInterval(interval);
   }, [isStarted, isFetching]);
 
   return (
     <div className="container">
-      <h3>GPT-3.5 Auto-Conversation Experiment</h3>
-     <label >Persona 1:</label>
-      <input
-        type="text"
-        id="persona1"
-        name="persona1"
-        value={persona1}
-        onChange={e => setPersona1(e.target.value)}
-      />
-      <label >Persona 2:</label>
-      <input
-        type="text"
-        id="persona2"
-        name="persona2"
-        value={persona2}
-        onChange={e => setPersona2(e.target.value)}
-      />
+      <h3>Infinite Chatbot</h3>
+      <label>Persona 1:</label>
+      <input type="text" id="persona1" name="persona1" value={persona1} onChange={(e) => setPersona1(e.target.value)} />
+      <label>Persona 2:</label>
+      <input type="text" id="persona2" name="persona2" value={persona2} onChange={(e) => setPersona2(e.target.value)} />
       <div className="buttons">
-        <button onClick={handleStartConversation} disabled={isStarted}>Start</button>
-        <button onClick={handleStop} disabled={!isStarted}>Stop</button>
-        <button onClick={handleClearConversation} disabled={conversation.length === 0}>Clear</button>
+        <button onClick={handleStartConversation} disabled={isStarted}>
+          Start
+        </button>
+        <button onClick={handleStop} disabled={!isStarted}>
+          Stop
+        </button>
+        <button onClick={handleClearConversation} disabled={conversation.length === 0}>
+          Clear
+        </button>
       </div>
       <ul className="conversation">
         {conversation.map((node, index) => (
